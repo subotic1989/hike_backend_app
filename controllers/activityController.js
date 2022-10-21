@@ -13,6 +13,7 @@ const createActivity = async (req, res) => {
 
 // activity all
 const getAllActivity = async (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
   const activities = await Activity.find({});
 
   numActivity = await Activity.countDocuments({});
