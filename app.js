@@ -34,7 +34,10 @@ app.use(helmet());
 
 app.use(xss());
 app.use(mongoSanitize());
-const whitelist = ["http://localhost:3000"]; // list of allow domain
+const whitelist = [
+  "http://localhost:3000",
+  "https://git.heroku.com/planinareje.git",
+]; // list of allow domain
 
 const corsOptions = {
   origin: function (origin, callback) {
