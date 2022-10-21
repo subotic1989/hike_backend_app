@@ -29,34 +29,15 @@ const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
 
 app.set("trust proxy", 1);
-
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  next();
+});
 app.use(helmet());
 
 app.use(xss());
 app.use(mongoSanitize());
-const whitelist = [
-  "http://localhost:3000",
-  "https://git.heroku.com/planinareje.git",
-]; // list of allow domain
-
-// const corsOptions = {
-//   origin: function (origin, callback) {
-//     if (!origin) {
-//       return callback(null, true);
-//     }
-
-//     if (whitelist.indexOf(origin) === -1) {
-//       var msg =
-//         "The CORS policy for this site does not " +
-//         "allow access from the specified Origin.";
-//       return callback(new Error(msg), false);
-//     }
-//     return callback(null, true);
-//   },
-// };
-
 app.use(cors());
-
 app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));
 app.use("/uploads", express.static(path.join("uploads")));
