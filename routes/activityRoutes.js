@@ -10,7 +10,7 @@ const {
 } = require("../controllers/activityController");
 
 router.post("/create", [authentication], createActivity);
-router.get("/", [authentication], getAllActivity);
+router.get("/", getAllActivity);
 router.patch("/:activityId", [authentication], updateActivity);
 router.delete("/:activityId", [authentication], removeActivity);
 
