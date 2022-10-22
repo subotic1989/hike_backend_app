@@ -8,12 +8,13 @@ const path = require("path");
 
 // rest of the packages
 const cookieParser = require("cookie-parser");
-// const fileUpload = require("express-fileupload");
 const rateLimiter = require("express-rate-limit");
 const helmet = require("helmet");
 const xss = require("xss-clean");
 const cors = require("cors");
 const mongoSanitize = require("express-mongo-sanitize");
+const fileUpload = require("express-fileupload");
+const cloudinary = require("cloudinary").v2;
 
 // database
 const connectDB = require("./db/connect");
@@ -23,6 +24,7 @@ const authRouter = require("./routes/authRoutes");
 const postRouter = require("./routes/postRoutes");
 const commentRouter = require("./routes/commentRoutes");
 const activityRouter = require("./routes/activityRoutes");
+const galleryRouter = require("./routes/galleryRoutes");
 
 // middleware
 const notFoundMiddleware = require("./middleware/not-found");
@@ -41,14 +43,23 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));
 app.use("/uploads", express.static(path.join("uploads")));
+app.use("/gallery", express.static(path.join("gallery")));
 
 app.use(express.static("./public"));
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+});
+app.use(fileUpload({ useTempFiles: true }));
 // app.use(fileUpload());
 
 app.use("/api/auth", authRouter);
 app.use("/api/post", postRouter);
 app.use("/api/comment", commentRouter);
 app.use("/api/activity", activityRouter);
+app.use("/api/gallery", galleryRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);

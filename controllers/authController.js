@@ -86,6 +86,8 @@ const editUser = async (req, res) => {
   }
 
   let url = req.body.image;
+  console.log("------------");
+  console.log(req.file);
 
   if (req.file) {
     url =
