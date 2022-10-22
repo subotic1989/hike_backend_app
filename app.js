@@ -52,14 +52,14 @@ cloudinary.config({
   api_key: process.env.CLOUD_API_KEY,
   api_secret: process.env.CLOUD_API_SECRET,
 });
-app.use(fileUpload({ useTempFiles: true }));
+// app.use(fileUpload({ useTempFiles: true }));
 // app.use(fileUpload());
 
 app.use("/api/auth", authRouter);
 app.use("/api/post", postRouter);
 app.use("/api/comment", commentRouter);
 app.use("/api/activity", activityRouter);
-app.use("/api/gallery", galleryRouter);
+app.use("/api/gallery", [fileUpload({ useTempFiles: true })], galleryRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
