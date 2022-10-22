@@ -33,6 +33,8 @@ const errorHandlerMiddleware = require("./middleware/error-handler");
 app.set("trust proxy", 1);
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
+  res.header("Content-Type", "application/json");
+  res.header("Accept", "application/json");
   next();
 });
 app.use(helmet());
