@@ -9,7 +9,7 @@ const CustomError = require("../errors");
 const getPhotosAll = async (req, res) => {
   const photos = await Photo.find({});
 
-  res.status(201).json({ msg: "Successfully fetched!", photos });
+  res.status(200).json({ msg: "Successfully fetched!", photos });
 };
 
 // PHOTOS upload
@@ -24,11 +24,7 @@ const uploadPhotoss = async (req, res) => {
     imageUrlList.push(result.url);
   }
 
-  console.log(imageUrlList);
-
   async function uploadToCloudinary(locaFilePath) {
-    var mainFolderName = "main";
-
     return cloudinary.uploader
       .upload(locaFilePath, {
         use_filename: true,
@@ -54,8 +50,7 @@ const uploadPhotoss = async (req, res) => {
 
 // PHOTOS upload
 const uploadPhotos = async (req, res) => {
-  console.log(req.files.images.length > 1);
-
+  //  multiple photos
   if (req.files.images.length < 1) {
     for (let i = 0; i < req.files.images.length; i++) {
       const result = await cloudinary.uploader.upload(
@@ -69,6 +64,7 @@ const uploadPhotos = async (req, res) => {
 
       await Photo.create({ imagePath: result.secure_url });
     }
+    // single photo
   } else {
     const result = await cloudinary.uploader.upload(
       req.files.images.tempFilePath,

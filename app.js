@@ -6,6 +6,9 @@ const express = require("express");
 const app = express();
 const path = require("path");
 
+// TEST !
+app.use(express.static(path.join(__dirname, "build")));
+
 // rest of the packages
 const cookieParser = require("cookie-parser");
 const rateLimiter = require("express-rate-limit");
@@ -77,5 +80,10 @@ const start = async () => {
     console.log(error);
   }
 };
+
+// TEST 2
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
 
 start();
