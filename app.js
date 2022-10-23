@@ -45,10 +45,10 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));
 app.use("/uploads", express.static(path.join("uploads")));
-app.use("/gallery", express.static(path.join("gallery")));
+// app.use("/gallery", express.static(path.join("gallery")));
 
 // app.use(express.static("./public"));
-app.use(express.static());
+app.use(express.static("./public"));
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
