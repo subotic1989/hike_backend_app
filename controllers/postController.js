@@ -5,7 +5,6 @@ const CustomError = require("../errors");
 const createPost = async (req, res) => {
   req.body.user = req.user.name;
   req.body.createdBy = req.user.userId;
-  // req.body.likedBy = req.user.userId;
 
   const post = await Post.create(req.body);
 

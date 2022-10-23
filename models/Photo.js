@@ -5,7 +5,11 @@ const PhotoSchema = new mongoose.Schema(
     imagePath: {
       type: String,
     },
+    place: {
+      type: String,
+    },
   },
+
   { timestamps: true }
 );
 
