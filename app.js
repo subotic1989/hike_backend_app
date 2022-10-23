@@ -48,7 +48,7 @@ app.use("/uploads", express.static(path.join("uploads")));
 app.use("/gallery", express.static(path.join("gallery")));
 
 // app.use(express.static("./public"));
-app.use(express.static("./public"));
+app.use(express.static());
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
