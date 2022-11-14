@@ -13,35 +13,74 @@ const createPost = async (req, res) => {
 
 // POSTS all
 const getAllPosts = async (req, res) => {
-  let numPosts = 0;
-  const { query } = req.query;
-  const skip = +req.query.skip || 0;
-  let posts;
+  const { query, search: post, numericsFilter, user, sort } = req.query;
 
-  if (query === "allPosts") {
-    posts = await Post.find({}).skip(skip).limit(2);
+  const queryObject = {};
 
-    numPosts = await Post.countDocuments({});
+  // FIND user posts
+  if (query && query === "posts") {
+    queryObject.createdBy = req.user.userId;
   }
 
-  if (query === "posts") {
-    posts = await Post.find({ createdBy: req.user.userId });
+  // FIND by user
+  if (user && user !== "all") {
+    queryObject.user = user;
   }
 
-  if (query === "comments") {
-    postsArray = await Post.find({}).populate({
-      path: "comments",
-      match: {
-        createdBy: req.user.userId,
-      },
+  // FIND by post
+  if (post) {
+    queryObject.post = { $regex: post, $options: "i" };
+  }
+
+  // FIND by num likes
+  if (numericsFilter && numericsFilter !== "numOfLikes=all") {
+    const operatorMap = {
+      ">": "$gt",
+      ">=": "$gte",
+      "=": "$eq",
+      "<": "$lt",
+      "<=": "$lte",
+    };
+    const regEx = /\b(<|>|>=|=|<|<=)\b/g;
+    let filters = numericsFilter.replace(
+      regEx,
+      (match) => `-${operatorMap[match]}-`
+    );
+    const options = ["numOfLikes", "rating"];
+    filters = filters.split(",").forEach((item) => {
+      const [field, operator, value] = item.split("-");
+      if (options.includes(field)) {
+        queryObject[field] = { [operator]: Number(value) };
+      }
     });
-
-    posts = postsArray.filter((post) => post.comments.length > 0);
   }
 
-  res
-    .status(200)
-    .json({ msg: "Successfully fetched!", posts, count: numPosts });
+  let result = Post.find(queryObject);
+
+  // SORT
+  if (sort) {
+    result = result.sort(sort);
+  } else {
+    result = result.sort("-createdAt");
+  }
+
+  // FIND user comments
+  if (query && query === "comments") {
+    result.populate({
+      path: "comments",
+      // match: {
+      //   createdBy: req.user.userId,
+      // },
+    });
+  }
+
+  let posts = await result;
+
+  if (query && query === "comments") {
+    posts = posts.filter((p) => p.comments.length > 0);
+  }
+
+  res.status(200).json({ msg: "Successfully fetched!", posts });
 };
 
 // POST update

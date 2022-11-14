@@ -6,7 +6,7 @@ const PostSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please provide Post"],
       minlength: [3, "The Post must have at least three characters!"],
-      maxlength: [50, "The Post cannot have more than 50 characters!"],
+      maxlength: [250, "The Post cannot have more than 50 characters!"],
     },
     user: {
       type: String,

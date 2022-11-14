@@ -6,6 +6,14 @@ const ActivitySchema = new mongoose.Schema(
       type: String,
       required: [true, "Please provide place"],
     },
+    start: {
+      type: String,
+      required: [true, "Please provide start"],
+    },
+    up: {
+      type: String,
+      required: [true, "Please provide up"],
+    },
     height: {
       type: String,
       required: [true, "Please provide height"],

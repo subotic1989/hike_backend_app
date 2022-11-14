@@ -13,6 +13,13 @@ const getPhotosAll = async (req, res) => {
   res.status(200).json({ msg: "Successfully fetched!", photos });
 };
 
+// PHOTOS album-names
+const getPhotoAlbumNames = async (req, res) => {
+  const photos = await Photo.find({}).select("place");
+
+  res.status(200).json({ msg: "Successfully fetched!", photos });
+};
+
 // PHOTOS upload
 const uploadPhotos = async (req, res) => {
   //  multiple photos
@@ -22,14 +29,14 @@ const uploadPhotos = async (req, res) => {
         req.files.images[i].tempFilePath,
         {
           use_filename: true,
-          folder: "Großer_Speikkogel",
+          folder: "Großer_Bösenstein",
         }
       );
       fs.unlinkSync(req.files.images[i].tempFilePath);
 
       await Photo.create({
         imagePath: result.secure_url,
-        place: "großer_speikkogel",
+        place: "großer_bösenstein",
       });
     }
     // single photo
@@ -53,5 +60,6 @@ const uploadPhotos = async (req, res) => {
 
 module.exports = {
   getPhotosAll,
+  getPhotoAlbumNames,
   uploadPhotos,
 };

@@ -25,18 +25,19 @@ const postRouter = require("./routes/postRoutes");
 const commentRouter = require("./routes/commentRoutes");
 const activityRouter = require("./routes/activityRoutes");
 const galleryRouter = require("./routes/galleryRoutes");
+const videoRouter = require("./routes/videoRoutes");
 
 // middleware
 const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
 
 app.set("trust proxy", 1);
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Content-Type", "application/json");
-  res.header("Accept", "application/json");
-  next();
-});
+// app.use((req, res, next) => {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Content-Type", "application/json");
+//   res.header("Accept", "application/json");
+//   next();
+// });
 app.use(helmet());
 
 app.use(xss());
@@ -44,24 +45,22 @@ app.use(mongoSanitize());
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));
-app.use("/uploads", express.static(path.join("uploads")));
-app.use("/gallery", express.static(path.join("gallery")));
-
 app.use(express.static("./public"));
+app.use("/uploads", express.static(path.join("uploads")));
+// app.use("/gallery", express.static(path.join("gallery")));
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.CLOUD_API_KEY,
   api_secret: process.env.CLOUD_API_SECRET,
 });
-// app.use(fileUpload({ useTempFiles: true }));
-// app.use(fileUpload());
 
 app.use("/api/auth", authRouter);
 app.use("/api/post", postRouter);
 app.use("/api/comment", commentRouter);
 app.use("/api/activity", activityRouter);
 app.use("/api/gallery", [fileUpload({ useTempFiles: true })], galleryRouter);
+app.use("/api/video", [fileUpload({ useTempFiles: true })], videoRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);

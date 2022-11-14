@@ -1,15 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const multerPhotosMiddleware = require("../middleware/multerPhotos");
 
 const {
   getPhotosAll,
   uploadPhotos,
+  getPhotoAlbumNames,
 } = require("../controllers/galleryController");
 
 router.get("/", getPhotosAll);
+router.get("/album-names", getPhotoAlbumNames);
 router.post("/", uploadPhotos);
-// router.post("/", [multerPhotosMiddleware], uploadPhotos);
-// router.delete("/:commentId", removeComment);
 
 module.exports = router;

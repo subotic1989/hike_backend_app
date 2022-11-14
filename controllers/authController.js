@@ -64,7 +64,7 @@ const login = async (req, res) => {
 
   attachCookiesToResponse({ res, user: tokenUser });
 
-  res.status(200).json({ msg: "Successfully logged!", user });
+  res.status(200).json({ msg: "Successfully logged-!", user });
 };
 
 // LOGOUT user
@@ -86,8 +86,6 @@ const editUser = async (req, res) => {
   }
 
   let url = req.body.image;
-  console.log("------------");
-  console.log(req.file);
 
   if (req.file) {
     url =
