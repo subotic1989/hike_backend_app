@@ -3,19 +3,17 @@ const path = require("path");
 const cloudinary = require("cloudinary").v2;
 const fs = require("fs");
 
-const CustomError = require("../errors");
+// PHOTOS album-names
+const getPhotoAlbumNames = async (req, res) => {
+  const albums = await Photo.find({}).select("");
+
+  res.status(200).json({ msg: "Successfully fetched!", albums });
+};
 
 // PHOTOS get all
 const getPhotosAll = async (req, res) => {
   const { place } = req.query;
   const photos = await Photo.find({ place: place });
-
-  res.status(200).json({ msg: "Successfully fetched!", photos });
-};
-
-// PHOTOS album-names
-const getPhotoAlbumNames = async (req, res) => {
-  const photos = await Photo.find({}).select("place");
 
   res.status(200).json({ msg: "Successfully fetched!", photos });
 };

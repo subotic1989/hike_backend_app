@@ -20,7 +20,6 @@ const getVideosNames = async (req, res) => {
 
 // VIDEO upload
 const uploadVideo = async (req, res) => {
-  console.log("............s.......");
   const result = await cloudinary.uploader.upload(
     req.files.video.tempFilePath,
     { resource_type: "video", use_filename: true, folder: "videos" }
